@@ -1,0 +1,15 @@
+Hi,
+
+You are about to embark on a mysterious adventure. My aim is that by the time you reach the end you will have become a confident builder of C++ and OpenFrameworks projects, a ninja of command line builds and a master of git.
+
+The adventure follows a twisted path, and will take several weeks to complete. You will be challenged at times, but it also has some fun surprises in store.
+
+Remember, do not be distraught when things get tough. It simply means that you are about to learn something new. Be patient and meticulous when reading tutorials - embrace the complexity !
+
+Your first task is to find Rabbit. He is hiding somewhere down that rabbit hole in a file. Look inside the directory rabbitHole using finder. It looks empty, but Rabbit has cunningly hidden all the files in the rabbit hole by prefixing them with a dot. This means you can’t see them in the usual way. We will have to explore the rabbit hole using terminal…
+
+Luckily you have just learnt about file searching and navigation using the command line. Use “cd” to enter different directories. Use “ls” with various options to explore directories and find hidden files. Use “less” to read files. Use “pwd” to see what directory you are in.  Keep moving down the rabbit hole until you find what you are looking for (you’ll know it when you see it).
+
+PS. When I refer to commands I will always put them in quotation marks. You should always ignore the outermost quotes.
+
+

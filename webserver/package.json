@@ -1,0 +1,15 @@
+{
+  "name": "aiw",
+  "version": "1.0.0",
+  "description": "Adventures in Wonderland Webserver",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Simon Katan",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^4.0.1",
+    "express": "^4.17.1"
+  }
+}
