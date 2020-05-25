@@ -1,17 +1,17 @@
-You’re very late indeed … but at least you found me. 
+You’re very late indeed … but at least you found me.
 
-Oh I’m being rude , I should introduce myself. I’m Rabbit. 
+Oh I’m being rude. I should introduce myself. I’m Rabbit.
 
-This is Underland. It’s a dark world of shell scripts, makefiles, header files and more. I will help you on your adventure through it. So far you have learnt some really useful bash commands …
+This is Underland. It’s a dark world of shell scripts, unsavoury characters and more. I will help you on your adventure through it. So far you have learnt some really useful bash commands …
 
 “cd” + directory path - change directory
 “ls” - list the files in a directory
 “ls -a” - list all the files in a directory including hidden files
 “ls -l” - list all the files in a directory in long format
-“ls -F” - list all the files and put a slash after each item which is a directory  
+“ls -F” - list all the files and put a slash after each item which is a directory
 “pwd” - print the file path of the current directory
 “less” + filename - read the contents of a file in the less editor
 
-You might want to cut and paste this list for reference. Why not use simple text to make a new file and build up a list of commands and tips as you go. 
+You might want to cut and paste this list for reference. Why not use simple text to make a new file and build up a list of commands and tips as you go.
 
-Now it’s time to go further into Underland. Do you see the theLittleDoor ? Good - go inside, explore and see if you can work out what to do. 
+Now it’s time to go further into Underland. Do you see the theLittleDoor ? Good - go inside, explore and see if you can work out what to do.
