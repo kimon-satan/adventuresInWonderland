@@ -1,10 +1,4 @@
-Hi,
-
-You are about to embark on a little adventure. My aim is that by the time you reach its end you will have mastered some invaluable command line tools.
-
-The adventure follows a twisted path, but it shouldn't take too long to complete. You will be challenged at times, but it also has some fun surprises in store.
-
-Remember, do not be distraught when things get tough. It simply means that you are about to learn something new. Be patient and meticulous when watching tutorials - embrace the complexity !
+Hi </USERNAME/>,
 
 Your first task is to find Rabbit. He is hiding somewhere down that rabbit hole in a file. Look inside the directory rabbitHole using Finder or Windows Explorer. It looks empty, but Rabbit has cunningly hidden all the files in the rabbit hole by prefixing them with a dot. This means you can’t see them in the usual way. You will have to explore the rabbit hole using the command line.
 

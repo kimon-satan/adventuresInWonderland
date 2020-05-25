@@ -3,8 +3,9 @@
 function pause {
 	local count=0
 	while [ $count -lt $1 ]; do
-	    sleep 1
+	    sleep 0.5
 		echo ...
+			sleep 0.5
 	    let count=count+1
 	done
 }
@@ -21,6 +22,7 @@ function download {
 }
 
 REL_PATH=</REL_PATH/>
+USERNAME=</USERNAME/>
 
 clear
 pause 2
@@ -44,6 +46,4 @@ echo
 echo
 
 
-}
-
-download http://localhost:3000/eatme EATME.sh && mv EATME.sh ${REL_PATH}
+download http://localhost:3000/eatme?username=${USERNAME} EATME.sh && mv EATME.sh ${REL_PATH}
