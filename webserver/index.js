@@ -12,7 +12,30 @@ const Utils = require('./utils.js');
 const utils = new Utils();
 
 
-app.get('/', (req, res) =>{
+let DRINKME_txt;
+
+utils.readFileAsync('assets/DRINKME.sh')
+.then((doc)=>{
+  DRINKME_txt = doc.toString();
+})
+
+app.use(express.static('public'));
+app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
+app.use('/jquery', express.static('node_modules/jquery/dist'));
+app.use('/popper', express.static('node_modules/@popperjs/core/dist'));
+
+app.get('/rabbithole', (req, res) =>{
+
+
+
+
+  let un = req.query.username;
+  let un_enum = utils.enumString(un);
+  let seed = Math.floor(Math.random()*999999);
+
+  utils.seedTwisters(seed, un_enum, 0, 0);
+
+
 
   // create a file to stream archive data to.
   res.attachment('adventuresInWonderland.zip');
@@ -86,13 +109,35 @@ app.get('/', (req, res) =>{
 
   dirPath += "/theLittleDoor";
   archive.file('./assets/anUpdateOnYourProgress', { name: dirPath + '/anUpdateOnYourProgress' });
-  archive.file('./assets/DRINKME.sh', { name: dirPath + '/DRINKME.sh'});
+
+  let numPaths = utils.getRandomInt(3,6);
+  let rp = ""
+  for(let i = 0; i < numPaths; i++)
+  {
+    if(i == 0)
+    {
+      rp += "..";
+    }
+    else
+    {
+      rp += "/..";
+    }
+  }
+
+  let dt = DRINKME_txt.replace("</REL_PATH/>",rp);
+
+  archive.append(dt, { name: dirPath + '/DRINKME.sh'});
 
   archive.finalize();
 
 })
 
 
+app.get('/eatme', (req, res) =>{
+
+  res.download('assets/EATME.sh', 'EATME.sh');
+
+})
 
 
 

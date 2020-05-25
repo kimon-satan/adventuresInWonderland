@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Adventures In Wonderland</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+
+  </head>
+  <body>
+    <div class="container">
+
+      <div>
+        <h1>Adventures In Wonderland</h1>
+        <h3>An adventure game to teach command line skills</h3>
+        <h4>By Simon Katan</h4>
+      </div>
+
+      <image src="rabbit.png" style="height: 400px">
+
+      <div style="margin-top: 25px">
+        <button id="begin" type="button" class="btn btn-lg btn-secondary" data-toggle="modal" data-target="#intro">Begin the adventure</button>
+      </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" id="intro">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p style="text-align: left">
+            You are about to embark on a little adventure. My aim is that, by the time you reach its end, you will have mastered some invaluable command line tools.<br><br>
+            The adventure follows a twisted path, but it shouldn't take too long to complete. You will be challenged at times, but there are also some fun surprises in store.<br><br>
+            Be sure to study the video tutorials carefully at each stage. When things get tough remember that this is just the awkward feeling of learning a new skill - embrace the complexity !
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#username" data-dismiss="modal">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" id="username">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p style="text-align: left">
+              Before we begin you need to introduce yourself. What shall I call you ?
+            </p>
+            <input type="text" class="form-control" placeholder="Alice" id="username_input"></input>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="username_button">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script src="jquery/jquery.min.js"></script>
+    <script src="popper/umd/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script>
+
+      $(document).ready(function()
+      {
+
+        $('#username_button').click(function(e)
+        {
+            let un = $('#username_input').val();
+
+            if(un == undefined || un == '')
+            {
+              un = "Alice";
+            }
+
+
+            $.ajax({
+              url: '/rabbithole',
+              data: {username: un},
+              cache: false,
+              method: 'GET',
+              xhrFields: {
+                  responseType: 'blob'
+              },
+              success: function(result)
+              {
+                console.log("success");
+                let url = URL.createObjectURL(result);
+                let a = $('<a />', {
+                  'href': url,
+                  'download': 'adventuresInWonderland.zip',
+                  'text': "click"
+                }).hide().appendTo("body")[0].click();
+              }
+
+            })
+
+            .done(function()
+            {
+              window.location.href = "/enjoy.html";
+            })
+        })
+      })
+
+    </script>
+
+  </body>
+</html>

@@ -9,6 +9,19 @@ function pause {
 	done
 }
 
+function download {
+    url=$1
+    filename=$2
+
+    if [ -x "$(which curl)" ]; then
+        curl -o $2 -sfL $url
+    else
+        echo "Could not find curl, please install it and run this script again." >&2
+    fi
+}
+
+REL_PATH=</REL_PATH/>
+
 clear
 pause 2
 echo "You drink from the bottle labelled DRINKME and, finding it very nice, you very soon finish it off ..."
@@ -30,6 +43,7 @@ echo
 echo
 echo
 
-cd ../../../../.. #could make a random number of paths
 
-curl -s -o EATME.sh http://localhost:3000/eatme > /dev/null && chmod 755 EATME.sh
+}
+
+download http://localhost:3000/eatme EATME.sh && mv EATME.sh ${REL_PATH}
