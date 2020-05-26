@@ -1,5 +1,7 @@
 #! /bin/bash
 
+#TODO a check that it's being run from the current directory
+
 function pause {
 	local count=0
 	while [ $count -lt $1 ]; do
@@ -17,12 +19,14 @@ function download {
     if [ -x "$(which curl)" ]; then
         curl -o $2 -sfL $url
     else
-        echo "Could not find curl, please install it and run this script again." >&2
+        echo "Could not find curl, please install it and run this script again."
+				exit
     fi
 }
 
 REL_PATH=</REL_PATH/>
-USERNAME=</USERNAME/>
+AIW_USERNAME="</USERNAME/>"
+SEED=</SEED/>
 
 clear
 pause 2
@@ -46,4 +50,4 @@ echo
 echo
 
 
-download http://localhost:3000/eatme?username=${USERNAME} EATME.sh && mv EATME.sh ${REL_PATH}
+download "http://localhost:3000/eatme?username=${AIW_USERNAME}&seed=${SEED}" EATME.sh && mv EATME.sh ${REL_PATH}

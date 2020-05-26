@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#TODO a check that it's being run from the current directory
+
 function pause {
 	local count=0
 	while [ $count -lt $1 ]; do
@@ -18,11 +20,13 @@ function download {
     if [ -x "$(which curl)" ]; then
         curl -o $2 -sfL $url
     else
-        echo "Could not find curl, please install it and run this script again." >&2
+        echo "Could not find curl, please install it and run this script again."
+				exit
     fi
 }
 
-USERNAME=</USERNAME/>
+AIW_USERNAME="</USERNAME/>"
+SEED=</SEED/>
 
 clear
 pause 2
@@ -45,4 +49,4 @@ echo
 echo
 echo
 
-download http://localhost:3000/lovelygarden?username=${USERNAME} lovelyGarden.zip && unzip lovelyGarden.zip && rm lovelyGarden.zip
+download "http://localhost:3000/lovelygarden?username=${AIW_USERNAME}&seed=${SEED}" lovelyGarden.zip && unzip -qq lovelyGarden.zip && rm lovelyGarden.zip

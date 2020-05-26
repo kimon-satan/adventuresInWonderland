@@ -379,9 +379,23 @@ Utils.prototype.buildIndex = function(dictionary)
 Utils.prototype.createRandomisedNumberList = function(start, end)
 {
 	let list = [];
-	for (i = start; i <= end; i++) list.push(i);
+	for (let i = start; i <= end; i++) list.push(i);
 	list = list.sort((a, b) => this.getRandomInt(0, 1) - 0.5);
 	return list;
+}
+
+
+Utils.prototype.getRandomString = function(numChars)
+{
+	let alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	let s = "";
+	for(let i = 0; i < numChars; i++)
+	{
+		let r = this.getRandomInt(0,alpha.length-1);
+		s+= alpha[r];
+	}
+
+	return s;
 }
 
 ///////////////////////////////CODE PARSING/////////////////////////////////

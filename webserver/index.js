@@ -15,6 +15,7 @@ const utils = new Utils();
 let DRINKME_txt;
 let README_txt;
 let EATME_txt;
+let caucusRace_txt;
 
 utils.readFileAsync('assets/DRINKME.sh')
 .then((doc)=>{
@@ -31,6 +32,11 @@ utils.readFileAsync('assets/EATME.sh')
   EATME_txt = doc.toString();
 })
 
+utils.readFileAsync('assets/caucusRace.sh')
+.then((doc)=>{
+  caucusRace_txt = doc.toString();
+})
+
 
 app.use(express.static('public'));
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
@@ -39,41 +45,13 @@ app.use('/popper', express.static('node_modules/@popperjs/core/dist'));
 
 app.get('/rabbithole', (req, res) =>{
 
-
   let un = req.query.username;
   let un_enum = utils.enumString(un);
-  let seed = Math.floor(Math.random()*999999);
+  let seed = Math.floor(Math.random()*999999); //TO BE STORED IN SHELL SCRIPTS
 
-  utils.seedTwisters(seed, un_enum, 0, 0);
+  utils.seedTwisters(seed, un_enum, 100, 1);
 
-  // create a file to stream archive data to.
-  res.attachment('adventuresInWonderland.zip');
-
-  let archive = archiver('zip', {
-    zlib: { level: 9 } // Sets the compression level.
-  });
-
-
-  // good practice to catch warnings (ie stat failures and other non-blocking errors)
-  archive.on('warning', function(err)
-  {
-    if (err.code === 'ENOENT')
-    {
-      // log warning
-      console.log(err);
-    } else {
-      // throw error
-      res.status(500).send({error: err.message});
-    }
-  });
-
-  // good practice to catch this error explicitly
-  archive.on('error', function(err) {
-  	res.status(500).send({error: err.message});
-  });
-
-  // pipe archive data to the file
-  archive.pipe(res);
+  let archive = prepareArchive(res,'adventuresInWonderland.zip');
 
   let rm = README_txt.replace("</USERNAME/>", un);
 
@@ -136,6 +114,7 @@ app.get('/rabbithole', (req, res) =>{
 
   let dt = DRINKME_txt.replace("</REL_PATH/>",rp);
   dt = dt.replace("</USERNAME/>", un);
+  dt = dt.replace("</SEED/>", seed);
 
   archive.append(dt, {name: dirPath + '/DRINKME.sh'});
 
@@ -149,7 +128,9 @@ app.get('/eatme', (req, res) =>{
   res.attachment('EATME.sh');
 
   let un = req.query.username;
+
   let et = EATME_txt.replace("</USERNAME/>", un);
+  et = et.replace("</SEED/>", req.query.seed);
 
   res.send(et);
 
@@ -158,166 +139,183 @@ app.get('/eatme', (req, res) =>{
 app.get('/lovelygarden', (req, res) =>{
 
   //generate the lovelygarden directory and zip it
-
   let un = req.query.username;
+  let un_enum = utils.enumString(un);
+  let seed = Number(req.query.seed);
+  let archive = prepareArchive(res, 'lovelyGarden');
 
-  //port to javascript
+  utils.seedTwisters(seed, un_enum, 100, 2);
 
+  let keys = [];
   let animals = ["mouse", "frog", "duckling_1", "duckling_2", "duckling_3", "magpie.bird", "canary.bird", "dodo.bird", "penguin.bird", "chameleon"];
-  let gardenLocations = ["theLawns", "theBeds", "theWoods", "theGreenhouses", "theField"];
-  //
-  let lawnLocations = ["croquetLawn", "cricketLawn", "theHedgeMaze", "longGrass", "fountains"];
-  // lawnSubLocations=(picnicRug deckchair picnicHamper summerhouse shadyTree wheelBarrow daffodils bluebells foxhole)
-  //
-  // bedsLocations=(shrubs cabbagePatch potatoes strawberries tomotatoes ornimentalFlowers daffodils pottingShed)
-  // bedsSubLocations=(wateringCan bucket wheelBarrow flowerPot waterSylo)
-  //
-  // woodsLocations=(pond darkPath stream scrubLand steepHill swamp)
-  // woodsSubLocations=(oldOakTree chestnutTree silverBirch willow antHill foxHole beeHive)
-  //
-  // greenhouseLocations=(strawberries tomatoes beans cucumbers pottingShed)
-  // greenhouseSubLocations=(wateringCan bucket wheelBarrow)
-  //
-  // fieldLocations=(brokenShed oldOakTree bigHill picketFence)
-  // fieldSubLocations=(scareCrow wheelBarrow abandonedTractor)
-  //
-  //
-  // function generateSubGarden {
-  // 	local count=0
-  // 	local randNum=0
-  // 	declare -a t2=("${!1}")
-  //
-  // 	while [ $count -lt ${#t2[@]} ]; do
-  //
-  // 		randNum=$(( (RANDOM % 10) ))
-  // 		if [ $randNum -gt 5 ]; then
-  // 			mkdir ${t2[$count]}
-  // 		fi
-  // 		let count=count+1
-  //
-  // 	done
-  // }
-  //
-  // function generateGardenArea {
-  //
-  // 	local t1=0
-  // 	local t2=0
-  //
-  // 	if [ "$1" == "theLawns" ]; then
-  // 		t1=("${lawnLocations[@]}")
-  // 		t2=("${lawnSubLocations[@]}")
-  //     elif [ "$1" == "theBeds" ]; then
-  // 		t1=("${bedsLocations[@]}")
-  // 		t2=("${bedsSubLocations[@]}")
-  //     elif [ "$1" == "theWoods" ]; then
-  // 		t1=("${woodsLocations[@]}")
-  // 		t2=("${woodsSubLocations[@]}")
-  //     elif [ "$1" == "theGreenhouses" ]; then
-  // 		t1=("${greenhouseLocations[@]}")
-  // 		t2=("${greenhouseSubLocations[@]}")
-  //     elif [ "$1" == "theField" ]; then
-  // 		t1=("${fieldLocations[@]}")
-  // 		t2=("${fieldSubLocations[@]}")
-  //     fi
-  //
-  // 	local count=0
-  //
-  // 	while [ $count -lt ${#t1[@]} ]; do
-  // 		mkdir ${t1[$count]}
-  // 		cd ${t1[$count]}
-  // 		generateSubGarden t2[@]
-  // 		cd ..
-  // 		let count=count+1
-  // 	done
-  //
-  // }
-  //
-  //
-  // function generateGarden {
-  // 	local count=0
-  // 	while [ $count -lt ${#gardenLocations[@]} ]; do
-  // 		mkdir ${gardenLocations[$count]}
-  // 		cd ${gardenLocations[$count]}
-  // 		generateGardenArea ${gardenLocations[$count]}
-  // 		cd ..
-  // 		let count=count+1
-  // 	done
-  //
-  // }
-  //
-  //
-  // function placeAnimals {
-  // 	local garden=( $(find lovelyGarden -mindepth 2 -type d) )
-  // 	local randIdx=0
-  // 	local filename=""
-  // 	local animalBuffer=""
-  // 	local locationBuffer=""
-  //
-  // 	for animal in "${animals[@]}"; do
-  // 		randIdx=$(( (RANDOM % ${#garden[@]}) ))
-  // 		if [ ${animal:0:8} == "duckling" ] ;then
-  // 			touch $animal
-  // 			echo "Hi i am a ${animal:0:8}" > $animal
-  // 			echo "$animal" | cksum >> $animal
-  // 			filename=$animal
-  // 		elif [ $(cut -d "." -f 2 <<< $animal) == ".bird" ] ;then
-  // 			touch $animal
-  // 			echo "Hi i am a $animal" > $animal
-  // 			echo "$animal" | cksum >> $animal
-  // 			§filename=$animal
-  // 		elif [ $animal == "chameleon" ] ;then
-  // 			locationBuffer=$(basename ${garden[$randIdx]})
-  // 			animalBuffer=$animal
-  // 			filename=""
-  // 			while test -n "$animalBuffer"; do
-  // 				c=${animalBuffer:0:1}     # Get the first character
-  // 				d=${locationBuffer:0:1}
-  // 				animalBuffer=${animalBuffer:1}   # trim the first character
-  // 				locationBuffer=${locationBuffer:1}
-  // 				filename=${filename}$c$d
-  // 			done
-  //
-  // 			touch $filename
-  // 			echo "Hi i am a $animal" > $filename
-  // 			echo "$animal" | cksum >> $filename
-  // 		else
-  // 			touch $animal
-  // 			echo "Hi i am a $animal" > $animal
-  // 			echo "$animal" | cksum >> $animal
-  // 			filename=$animal
-  // 		fi
-  // 		mv $filename ${garden[$randIdx]}
-  // 	done
-  // }
-  //
-  // mkdir lovelyGarden
-  // cd lovelyGarden
-  // generateGarden
-  // cd ..
-  // placeAnimals
-  //
-  // curl -s -o lovelyGarden/caucusRace.sh http://igor.gold.ac.uk/~skata001/underland/pt1/caucusRace.sh > /dev/null && chmod 777 lovelyGarden/caucusRace.sh
-  // curl -s -o lovelyGarden/instructionsFromRabbit http://igor.gold.ac.uk/~skata001/underland/pt1/instructionsFromRabbit > /dev/null
-  // curl -s -o baseutils.py http://igor.gold.ac.uk/~skata001/underland/pt1/baseutils > /dev/null
-  //
-  // if hash python 2>/dev/null; then
-  //     echo "python found">/dev/null
-  // else
-  //     var="#!/usr/bin/python2"
-  //     sed -i '1s|.*|'$var'|' baseutils.py
-  // fi
-  //
-  // mv baseutils.py lovelyGarden/theWoods/stream/snake.py
-  // chmod 777 lovelyGarden/theWoods/stream/snake.py
+
+  //generate the keys for the animals
+  for(let i = 0; i < animals.length; i++)
+  {
+    keys.push(utils.getRandomString(15));
+  }
 
 
+  let garden = [
+    {
+      area: "theLawns",
+      locations: ["croquetLawn", "cricketLawn", "theHedgeMaze", "longGrass", "fountains", "summerhouse","shadyTree","wheelBarrow"],
+      items: ["picnicRug", "deckchair", "picnicHamper", "daffodils", "bluebells"]
+    },
+    {
+      area: "theBeds",
+      locations: ["shrubs", "cabbagePatch", "potatoes", "strawberries", "tomatoes","ornimentalFlowers", "daffodils", "pottingShed"],
+      items: ["wateringCan", "bucket", "wheelBarrow", "flowerPot", "trowel"]
+    },
+    {
+      area:"theWoods",
+      locations: ["pond", "darkPath", "stream", "scrubLand", "steepHill", "swamp"],
+      items: ["oldOakTree", "chestnutTree", "silverBirch", "willow"]
+    },
+    {
+      area: "theGreenhouses",
+      locations: ["strawberries", "tomatoes", "beans", "cucumbers", "pottingShed"],
+      items: ["wateringCan", "bucket", "wheelBarrow","trowel"]
+    },
+    {
+      area: "theField",
+      locations: ["brokenShed", "oldOakTree", "bigHill", "picketFence"],
+      items: ["scareCrow", "wheelBarrow", "abandonedTractor"]
+    }];
 
-  res.end();
+  let generateSubGarden = function (_archive, subgarden)
+  {
+    let t_locations = utils.choose(subgarden.locations, subgarden.items.length);
+    subgarden.locations = t_locations;
+
+    for(let i = 0; i < subgarden.locations.length; i++)
+    {
+        let item = utils.deepChoose(subgarden.items);
+        _archive.append("Here lies " + item + ".",{name: "lovelyGarden/" +subgarden.area + "/" + subgarden.locations[i] + "/" + item});
+    }
+  }
+
+  for(let i = 0; i < garden.length; i++)
+  {
+    generateSubGarden(archive,garden[i]);
+  }
+
+  //place the animals
+
+  for(let i = 0; i < animals.length; i++)
+  {
+    let a = utils.choose(garden);
+    let l = utils.choose(a.locations);
+    let fp = "lovelyGarden/" + a.area + "/" + l + "/";
+
+    let r = /[a-z]*/.exec(animals[i]);
+    let str = "Hi i am a " + r[0] + "\n";
+    str += keys[i];
+
+    if(i == animals.length - 1)
+    {
+      archive.append(str,{name: fp + keys[i]});
+    }
+    else
+    {
+      archive.append(str,{name: fp + animals[i]});
+    }
+  }
 
 
+  let cr = caucusRace_txt.replace("</USERNAME/>", un);
+  cr = cr.replace("</SEED/>", req.query.seed);
+
+  archive.append(cr, {name: "lovelyGarden/caucusRace.sh"});
+  archive.file('./assets/instructionsFromRabbit', {name: "lovelyGarden/instructionsFromRabbit"});
+
+  archive.finalize();
 
 })
 
+app.get('/caucusrace', (req, res) =>{
+
+  let un = req.query.username;
+  let un_enum = utils.enumString(un);
+  let seed = Number(req.query.seed);
+
+  utils.seedTwisters(seed, un_enum, 100, 2);
+
+  let keys = [];
+  let animals = ["mouse", "frog", "duckling_1", "duckling_2", "duckling_3", "magpie.bird", "canary.bird", "dodo.bird", "penguin.bird", "chameleon"];
+
+  //generate the keys for the animals
+  for(let i = 0; i < animals.length; i++)
+  {
+    keys.push(utils.getRandomString(15));
+  }
+
+  let score = 0;
+
+  for(let i = 0; i < animals.length; i++)
+  {
+    let k = req.query[animals[i] + "_key"];
+    if(k == keys[i])
+    {
+      score++;
+    }
+    else
+    {
+      break;
+    }
+  }
+
+  let codes = "";
+
+  //the winning codes for the score file
+  for(let i = 0; i < score; i++)
+  {
+    utils.seedTwisters(seed, un_enum, 100, i+10);
+    codes += String(100+i) + "_" + utils.getRandomString(10);
+    if(i < score - 1)
+    {
+      codes += ", ";
+    }
+  }
+
+  res.send(codes);
+
+
+});
+
+
+function prepareArchive(res, filename)
+{
+  // create a file to stream archive data to.
+  res.attachment(filename);
+
+  let archive = archiver('zip', {
+    zlib: { level: 9 } // Sets the compression level.
+  });
+
+  // good practice to catch warnings (ie stat failures and other non-blocking errors)
+  archive.on('warning', function(err)
+  {
+    if (err.code === 'ENOENT')
+    {
+      // log warning
+      console.log(err);
+    } else {
+      // throw error
+      res.status(500).send({error: err.message});
+    }
+  });
+
+  // good practice to catch this error explicitly
+  archive.on('error', function(err) {
+    res.status(500).send({error: err.message});
+  });
+
+  // pipe archive data to the file
+  archive.pipe(res);
+
+  return archive;
+}
 
 
 
