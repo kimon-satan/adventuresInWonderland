@@ -1,9 +1,10 @@
 #!/bin/bash
 
-declare -a arglist
-declare -a joined
+#TODO check if this is running from the current directory
 
-#TODO check current directory
+#get the source directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+#https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself
 
 function pause {
 	local count=0
@@ -28,20 +29,35 @@ function download {
     fi
 }
 
-AIW_USERNAME="</USERNAME/>"
-SEED=</SEED/>
+function writeScoreFile(){
+
+	rm scoreFile 2> /dev/null && touch scoreFile
+	echo "$AIW_USERNAME's Score File" >> scoreFile
+	echo "Part 1 - The Caucus Race" >> scoreFile
+	for code in ${code_array[*]}; do
+		if [[ $code == *"score_"* ]]; then
+			continue
+		else
+			echo $code >> scoreFile
+		fi
+	done
+
+}
+
+AIW_USERNAME="Simon"
+SEED=118582
 
 un=$1
 if [[ -z $un ]] ;then
     echo "To run the caucus race you must pass your name as an argument."
     pause 1
     echo "Have another go."
-    exit 1
+    return 1 2> /dev/null || exit 1
 elif [ "$un" != "$AIW_USERNAME" ] ;then
 		echo ${un} "is not the person I was expecting to run this race."
 		pause 1
 		echo "Have another go."
-		exit 1
+		return 1 2> /dev/null || exit 1 #exit early considering if source or ./ has been used
 fi
 
 files=($(find . -maxdepth 1 -type f))
@@ -60,9 +76,25 @@ for animal in ${animals[*]}; do
 				echo "Be sure to use the correct file which you found in the garden."
 				pause 2
 				echo "Remove this version of ${item} and try again."
-				exit 1
+				return 1 2> /dev/null || exit 1
 			else
 				url="$url&${animal}_key=${k}"
+			fi
+		elif [ $animal = "chameleon" ]; then
+			codeFound=$(echo "${item:2}" | grep -E "^[A-Za-z0-9]{15}$")
+			if [ ${#codeFound} -gt 0 ] ;then
+				k=$(grep -E "^[A-Za-z0-9]{15}$" ${item}) #look for a 15 char key inside the file
+				if [ $k = $codeFound ]; then
+					url="$url&${animal}_key=${k}"
+				else
+					pause 2
+					echo "The file ${item} does not contain a valid key."
+					pause 2
+					echo "Be sure to use the correct file which you found in the garden."
+					pause 2
+					echo "Remove this version of ${item} and try again."
+					return 1 2> /dev/null || exit 1
+				fi
 			fi
 		fi
 	done
@@ -75,32 +107,37 @@ until [ ${res+x} = "x" ]; do #wait for the result
 	pause 1
 done
 
-if [ ${res} -lt 10 ]; then
+IFS=', ' read -a code_array <<< $res  2> /dev/null  || IFS=', ' read -A code_array <<< $res #split the array into strings
+
+score=${code_array[@]:0:1}
+score="${score/score_/}"
+
+if [ $score -lt 10 ]; then
 	echo "Whoah steady ..."
 	pause 1
 	echo "You're not ready to run the caucus race just yet"
 	pause 1
 fi
 
-if [ ${res} -eq 0 ]; then
+if [ $score -eq 0 ]; then
 	echo "You need to find the mouse"
 	pause 1
-elif [ ${res} -lt 2 ]; then
+elif [ $score -lt 2 ]; then
 	echo "You need to find the frog"
 	pause 1
-elif [ ${res} -lt 5 ]; then
+elif [ $score -lt 5 ]; then
 	echo "You need to find all the ducklings"
 	pause 1
 	echo "try searching for files named duckling*"
 	pause 1
 	echo "This means any file name starting with the name duckling"
-elif [ ${res} -lt 9 ]; then
+elif [ $score -lt 9 ]; then
 	echo "You need to find all the birds in the garden"
 	pause 1
 	echo "Try searching for files which end in the extension .bird"
 	pause 1
 	echo "You can do this by searching for files named *.bird"
-elif [ ${res} -lt 10 ]; then
+elif [ $score -lt 10 ]; then
 	echo "You need to find the chameleon - a tricky customer"
 	pause 1
 	echo "She disguises herself by changing her filename"
@@ -118,7 +155,9 @@ elif [ ${res} -lt 10 ]; then
 	echo ". is the directory to start seaching from recursively"
 	pause 1
 	echo "give it a try."
-elif [ ${res} -eq 10 ]; then
+elif [ $score -eq 10 ]; then
+	#Write to scoreFile on 10th time
+	writeScoreFile "${code_array[@]:1:10}"
 	pause 1
 	echo "on your marks"
 	pause 1
@@ -144,19 +183,29 @@ elif [ ${res} -eq 10 ]; then
 
 	winner="frog" #TODO modify the winner and animals
 
-	echo "That was a great race. Let me tell you what to do next." >> $winner
-	echo >> $winner
-	echo >> $winner
-	echo "Type “ls” in this directory. You will see a file called scoreFile." >> $winner
-	echo "Read the file using less. You will see it contains your name and some cryptic codes." >> $winner
-	echo "The codes prove that you have successfully completed these tasks. Everyone’s code is different and personalised to them." >> $winner
-	echo >> $winner
-	echo >> $winner
-	echo "You need to keep this file safe as it will track your progress over the course of your adventure."
-	echo "Use “cp” to put a copy of it somewhere safe (eg. your documents folder)." >> $winner
-	echo >> $winner
-	echo >> $winner
-	echo "This is just a demo version of Adventures In Wonderland so I'm afraid your adventure stops here."
-	echo "I hope you enjoyed the ride. If you'd like to know more contact me at simon@simonkatan.co.uk." >> $winner
+	head -n 2 $winner > newfile
+
+	echo >> newFile
+	echo >> newFile
+	echo "Well done $AIW_USERNAME ! That was a great race." >> newFile
+	echo "This is just a demo version of Adventures In Wonderland, so I'm afraid your adventure stops here." >> newFile
+	echo "Here's what would happen next." >> newFile
+	echo >> newFile
+	echo >> newFile
+	echo "Type “ls” in this directory. You will see a file called scoreFile." >> newFile
+	echo "Read the file using less. You will see it some cryptic codes." >> newFile
+	echo "The codes prove that you have successfully completed run the Caucus Race." >> newFile
+	echo "Everyone’s code is different and personalised to them." >> newFile
+	echo >> newFile
+	echo >> newFile
+	echo "To continue with your adventure, you need to keep this file safe." >> newFile
+	echo "It will track your progress over the course of your adventure." >> newFile
+	echo "Use “cp” to put a copy of it somewhere secure (eg. a dedicated subfolder in your documents folder)." >> newFile
+	echo >> newFile
+	echo >> newFile
+	echo "I hope you enjoyed the ride. If you'd like to know more contact me at simon@simonkatan.co.uk." >> newFile
+
+	rm $winner && mv newFile $winner
+
 
 fi

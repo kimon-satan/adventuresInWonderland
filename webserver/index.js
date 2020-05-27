@@ -265,17 +265,14 @@ app.get('/caucusrace', (req, res) =>{
     }
   }
 
-  let codes = "";
+  let codes = "score_" + score;
 
+  utils.seedTwisters(seed, un_enum, 100, 3);
   //the winning codes for the score file
   for(let i = 0; i < score; i++)
   {
-    utils.seedTwisters(seed, un_enum, 100, i+10);
+    codes += ", ";
     codes += String(100+i) + "_" + utils.getRandomString(10);
-    if(i < score - 1)
-    {
-      codes += ", ";
-    }
   }
 
   res.send(codes);
