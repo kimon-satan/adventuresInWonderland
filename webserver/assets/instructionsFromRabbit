@@ -10,7 +10,7 @@ Copy and paste these into your list of commands.
 
 I am now entrusting you with organising a caucus race. I imagine that you are wondering what a caucus race is. Well the best way to find out is to do it. Try running the file. You’ll see that you aren’t ready to run the race just yet. You need some runners !
 
-There are are animals spread all over the garden. I need you to gather them here for the race one by one. Each time you have brought an animal to this point in the garden run the shell script “caucusRace.sh” and you will find out what to do next. If you have all the animals the caucus race will run, but otherwise you will be given instructions of more animals to find.
+There are are animals spread all over the garden. I need you to gather them to this directory for the race one by one. Each time you have brought an animal to this point in the garden run the shell script “caucusRace.sh” and you will find out what to do next. If you have all the animals the caucus race will run, but otherwise you will be given instructions of more animals to find.
 
 The garden is large and has many branching and twisted paths so we will need a new command line tool called “find” to find them. You will also need to use “mv” to move the files to this directory. Watch this video to understand how to use “find” and “mv” and a few other useful commands.
 

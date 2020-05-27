@@ -1,10 +1,8 @@
 #!/bin/bash
 
-#TODO check if this is running from the current directory
 
-#get the source directory
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-#https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself
+
+
 
 function pause {
 	local count=0
@@ -16,18 +14,6 @@ function pause {
 	done
 }
 
-
-function download {
-    url=$1
-    filename=$2
-
-    if [ -x "$(which curl)" ]; then
-        curl -o $2 -sfL $url
-    else
-        echo "Could not find curl, please install it and run this script again."
-				exit
-    fi
-}
 
 function writeScoreFile(){
 
@@ -59,6 +45,18 @@ elif [ "$un" != "$AIW_USERNAME" ] ;then
 		echo "Have another go."
 		return 1 2> /dev/null || exit 1 #exit early considering if source or ./ has been used
 fi
+
+#check the working directory is lovelyGarden
+wd=$(pwd)
+wd=${wd: -12}
+
+if [ $wd != "lovelyGarden" ] ;then
+	echo "You must run caucusRace from inside the directory lovelyGarden."
+	pause 1
+	echo "Have another go."
+	return 1 2> /dev/null || exit 1
+fi
+
 
 files=($(find . -maxdepth 1 -type f))
 animals=( mouse frog duckling_1 duckling_2 duckling_3 magpie.bird canary.bird dodo.bird penguin.bird chameleon )

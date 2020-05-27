@@ -20,9 +20,21 @@ function download {
         curl -o $2 -sfL $url
     else
         echo "Could not find curl, please install it and run this script again."
-				exit
+				return 1 2> /dev/null || exit 1
     fi
 }
+
+#check the working directory is lovelyGarden
+wd=$(pwd)
+wd=${wd: -13}
+
+if [ $wd != "theLittleDoor" ] ;then
+	echo "You must run DRINKME from inside the directory theLittleDoor."
+	pause 1
+	echo "Have another go."
+	return 1 2> /dev/null || exit 1
+fi
+
 
 REL_PATH=</REL_PATH/>
 AIW_USERNAME="</USERNAME/>"
