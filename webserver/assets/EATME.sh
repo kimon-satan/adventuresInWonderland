@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#TODO a check that it's being run from the current directory
-
 function pause {
 	local count=0
 	while [ $count -lt $1 ]; do
@@ -12,6 +10,26 @@ function pause {
 	done
 }
 
+checkconnection ()
+{
+  local count=0
+  local res=''
+
+  if [ ! -x "$(which curl)" ]; then
+    echo "Could not find curl, please install it and run this script again."
+    return 1 2> /dev/null || exit 1
+  fi
+
+  until [ ! -z "$res" ]; do #wait for the result
+    res=$(curl -s "</URL/>/checkin")
+    sleep 1
+    count=$((count+1))
+    if [ $count -gt 4 ] ;then
+      echo "The server is not responding. Are you connected to the internet?"
+      return 1 2> /dev/null || exit 1
+    fi
+  done
+}
 
 function download {
     url=$1
@@ -49,4 +67,5 @@ echo
 echo
 echo
 
-download "http://localhost:3000/lovelygarden?username=${AIW_USERNAME}&seed=${SEED}" lovelyGarden.zip && unzip -qq lovelyGarden.zip && rm lovelyGarden.zip
+checkconnection
+download "</URL/>/lovelygarden?username=${AIW_USERNAME}&seed=${SEED}" lovelyGarden.zip && unzip -qq lovelyGarden.zip && rm lovelyGarden.zip

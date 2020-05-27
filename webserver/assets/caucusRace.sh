@@ -1,9 +1,6 @@
 #!/bin/bash
 
 
-
-
-
 function pause {
 	local count=0
 	while [ $count -lt $1 ]; do
@@ -29,6 +26,29 @@ function writeScoreFile(){
 	done
 
 }
+
+checkconnection ()
+{
+  local count=0
+  local res=''
+
+  if [ ! -x "$(which curl)" ]; then
+    echo "Could not find curl, please install it and run this script again."
+    return 1 2> /dev/null || exit 1
+  fi
+
+  until [ ! -z "$res" ]; do #wait for the result
+    res=$(curl -s "</URL/>/checkin")
+    sleep 1
+    count=$((count+1))
+    if [ $count -gt 4 ] ;then
+      echo "The server is not responding. Are you connected to the internet?"
+      return 1 2> /dev/null || exit 1
+    fi
+  done
+}
+
+
 
 AIW_USERNAME="Simon"
 SEED=118582
@@ -58,10 +78,12 @@ if [ $wd != "lovelyGarden" ] ;then
 fi
 
 
+checkconnection
+
 files=($(find . -maxdepth 1 -type f))
 animals=( mouse frog duckling_1 duckling_2 duckling_3 magpie.bird canary.bird dodo.bird penguin.bird chameleon )
 count=0
-url="http://localhost:3000/caucusrace?username=${AIW_USERNAME}&seed=${SEED}"
+url="</URL/>/caucusrace?username=${AIW_USERNAME}&seed=${SEED}"
 
 for animal in ${animals[*]}; do
 	for item in ${files[*]}; do
@@ -100,9 +122,16 @@ for animal in ${animals[*]}; do
 done
 
 
-res=$(curl -s ${url})
-until [ ${res+x} = "x" ]; do #wait for the result
-	pause 1
+res=""
+count=0
+until [ ! -z "$res" ]; do #wait for the result
+	res=$(curl -s ${url})
+	sleep 1
+	let count=count+1
+	if [ $count -gt 4 ] ;then
+		echo "The server is not responding. Are you connected to the internet?"
+		return 1 2> /dev/null || exit 1
+	fi
 done
 
 IFS=', ' read -a code_array <<< $res  2> /dev/null  || IFS=', ' read -A code_array <<< $res #split the array into strings

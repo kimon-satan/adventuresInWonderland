@@ -1,7 +1,10 @@
 
 const express = require('express');
 const app = express();
-const port = 3000;
+const argv = require('yargs').argv;
+
+const HOME_URL = argv.url || "http://localhost:3000";
+const PORT = argv.port || 3000;
 
 // require modules
 const fs = require('fs');
@@ -115,6 +118,7 @@ app.get('/rabbithole', (req, res) =>{
   let dt = DRINKME_txt.replace("</REL_PATH/>",rp);
   dt = dt.replace("</USERNAME/>", un);
   dt = dt.replace("</SEED/>", seed);
+  dt = dt.replace("</URL/>", HOME_URL);
 
   archive.append(dt, {name: dirPath + '/DRINKME.sh'});
 
@@ -131,6 +135,7 @@ app.get('/eatme', (req, res) =>{
 
   let et = EATME_txt.replace("</USERNAME/>", un);
   et = et.replace("</SEED/>", req.query.seed);
+  et = et.replace("</URL/>", HOME_URL);
 
   res.send(et);
 
@@ -225,12 +230,17 @@ app.get('/lovelygarden', (req, res) =>{
 
   let cr = caucusRace_txt.replace("</USERNAME/>", un);
   cr = cr.replace("</SEED/>", req.query.seed);
+  cr = cr.replace("</URL/>", HOME_URL);
 
   archive.append(cr, {name: "lovelyGarden/caucusRace.sh"});
   archive.file('./assets/instructionsFromRabbit', {name: "lovelyGarden/instructionsFromRabbit"});
 
   archive.finalize();
 
+})
+
+app.get('/checkin', (req, res) =>{
+  res.send("Hello");
 })
 
 app.get('/caucusrace', (req, res) =>{
@@ -316,4 +326,4 @@ function prepareArchive(res, filename)
 
 
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(PORT, () => console.log(`Example app listening at http://localhost:${PORT}`))
