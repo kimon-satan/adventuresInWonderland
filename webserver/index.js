@@ -57,7 +57,7 @@ app.get('/rabbithole', (req, res) =>{
 
   let archive = prepareArchive(res,'adventuresInWonderland.zip');
 
-  let rm = README_txt.replace("</USERNAME/>", un);
+  let rm = README_txt.replace(/<\/USERNAME\/>/g, un);
 
   archive.append(rm, { name: 'README' });
 
@@ -116,10 +116,10 @@ app.get('/rabbithole', (req, res) =>{
     }
   }
 
-  let dt = DRINKME_txt.replace(/</REL_PATH/>/g,rp);
-  dt = dt.replace(/</USERNAME/>/g, un);
-  dt = dt.replace(/</SEED/>/g, seed);
-  dt = dt.replace(/</URL/>/g, HOME_URL);
+  let dt = DRINKME_txt.replace(/<\/REL_PATH\/>/g,rp);
+  dt = dt.replace(/<\/USERNAME\/>/g, un);
+  dt = dt.replace(/<\/SEED\/>/g, seed);
+  dt = dt.replace(/<\/URL\/>/g, HOME_URL);
 
   archive.append(dt, {name: dirPath + '/DRINKME.sh'});
 
@@ -134,9 +134,9 @@ app.get('/eatme', (req, res) =>{
 
   let un = req.query.username;
 
-  let et = EATME_txt.replace("</USERNAME/>", un);
-  et = et.replace("</SEED/>", req.query.seed);
-  et = et.replace("</URL/>", HOME_URL);
+  let et = EATME_txt.replace(/<\/USERNAME\/>/g, un);
+  et = et.replace(/<\/SEED\/>/g, req.query.seed);
+  et = et.replace(/<\/URL\/>/g, HOME_URL);
 
   res.send(et);
 
@@ -229,9 +229,9 @@ app.get('/lovelygarden', (req, res) =>{
   }
 
 
-  let cr = caucusRace_txt.replace("</USERNAME/>", un);
-  cr = cr.replace("</SEED/>", req.query.seed);
-  cr = cr.replace("</URL/>", HOME_URL);
+  let cr = caucusRace_txt.replace(/<\/USERNAME\/>/g, un);
+  cr = cr.replace(/<\/SEED\/>/g, req.query.seed);
+  cr = cr.replace(/<\/URL\/>/g, HOME_URL);
 
   archive.append(cr, {name: "lovelyGarden/caucusRace.sh"});
   archive.file('./assets/instructionsFromRabbit', {name: "lovelyGarden/instructionsFromRabbit"});
