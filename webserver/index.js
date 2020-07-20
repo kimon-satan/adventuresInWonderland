@@ -46,7 +46,10 @@ app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 app.use('/jquery', express.static('node_modules/jquery/dist'));
 app.use('/popper', express.static('node_modules/@popperjs/core/dist'));
 
+
 app.get('/rabbithole', (req, res) =>{
+
+  console.log("rabbit");
 
   let un = req.query.username;
   let un_enum = utils.enumString(un);
