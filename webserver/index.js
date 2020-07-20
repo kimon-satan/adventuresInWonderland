@@ -230,7 +230,7 @@ app.get('/lovelygarden', (req, res) =>{
 
 
   let cr = caucusRace_txt.replace(/<\/USERNAME\/>/g, un);
-  cr = cr.replace(/<\/SEED\/>/g, req.query.seed);
+  cr = cr.replace(/<\/SEED\/>/g, seed);
   cr = cr.replace(/<\/URL\/>/g, HOME_URL);
 
   archive.append(cr, {name: "lovelyGarden/caucusRace.sh"});

@@ -50,8 +50,8 @@ checkconnection ()
 
 
 
-AIW_USERNAME="Simon"
-SEED=118582
+AIW_USERNAME=</USERNAME/>
+SEED=</SEED/>
 
 un=$1
 if [[ -z $un ]] ;then
