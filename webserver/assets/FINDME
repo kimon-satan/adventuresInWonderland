@@ -8,7 +8,6 @@ This is Underland. It’s a dark world of shell scripts, unsavoury characters an
 “ls” - list the files in a directory
 “ls -a” - list all the files in a directory including hidden files
 “ls -l” - list all the files in a directory in long format
-“ls -F” - list all the files and put a slash after each item which is a directory
 “pwd” - print the file path of the current directory
 “less” + filename - read the contents of a file in the less editor
 

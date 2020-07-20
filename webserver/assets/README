@@ -2,6 +2,6 @@ Hi </USERNAME/>,
 
 Your first task is to find Rabbit. He is hiding somewhere down that rabbit hole in a file. Look inside the directory rabbitHole using Finder or Windows Explorer. It looks empty, but Rabbit has cunningly hidden all the files in the rabbit hole by prefixing them with a dot. This means you can’t see them in the usual way. You will have to explore the rabbit hole using the command line.
 
-Watch this video to learn about using the command line and navigating through files and folders. Use “cd” to enter different directories. Use “ls” with various options to explore directories and find hidden files. Use “less” to read files. Use “pwd” to see what directory you are in. Keep moving down the rabbit hole until you find what you are looking for - you’ll know it when you see it.
+Watch this video https://youtu.be/bcBGfQwNbug to learn about using the command line and navigating through files and folders. Use “cd” to enter different directories. Use “ls” with various options to explore directories and find hidden files. Use “less” to read files. Use “pwd” to see what directory you are in. Keep moving down the rabbit hole until you find what you are looking for - you’ll know it when you see it.
 
 PS. When I refer to commands I will always put them in quotation marks. You should always ignore the outermost quotes.

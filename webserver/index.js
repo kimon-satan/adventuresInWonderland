@@ -10,7 +10,6 @@ const PORT = argv.port || 3000;
 const fs = require('fs');
 const archiver = require('archiver');
 
-const name = "skata001";
 const Utils = require('./utils.js');
 const utils = new Utils();
 
@@ -47,6 +46,7 @@ app.use('/jquery', express.static('node_modules/jquery/dist'));
 app.use('/popper', express.static('node_modules/@popperjs/core/dist'));
 
 app.get('/rabbithole', (req, res) =>{
+
 
   let un = req.query.username;
   let un_enum = utils.enumString(un);
