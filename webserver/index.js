@@ -286,6 +286,7 @@ app.get('/caucusrace', (req, res) =>{
     codes += String(100+i) + "_" + utils.getRandomString(10);
   }
 
+  res.set('Content-Type', 'text/plain');
   res.send(codes);
 
 
