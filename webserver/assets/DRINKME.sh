@@ -25,7 +25,7 @@ function download {
 checkconnection ()
 {
 	if [ -x "$(which curl)" ]; then
-
+			echo ""
 	else
 			echo "Could not find curl, please install it and run this script again."
 			return 1 2> /dev/null || exit 1

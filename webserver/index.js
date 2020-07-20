@@ -116,10 +116,10 @@ app.get('/rabbithole', (req, res) =>{
     }
   }
 
-  let dt = DRINKME_txt.replace("</REL_PATH/>",rp);
-  dt = dt.replace("</USERNAME/>", un);
-  dt = dt.replace("</SEED/>", seed);
-  dt = dt.replace("</URL/>", HOME_URL);
+  let dt = DRINKME_txt.replace(/</REL_PATH/>/g,rp);
+  dt = dt.replace(/</USERNAME/>/g, un);
+  dt = dt.replace(/</SEED/>/g, seed);
+  dt = dt.replace(/</URL/>/g, HOME_URL);
 
   archive.append(dt, {name: dirPath + '/DRINKME.sh'});
 
