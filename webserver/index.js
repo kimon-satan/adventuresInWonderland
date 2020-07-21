@@ -241,9 +241,9 @@ app.get('/lovelygarden', (req, res) =>{
 
   archive.append(cr, {name: "lovelyGarden/caucusRace.sh"});
 
-  let in = instructions_txt.replace(/<\/USERNAME\/>/g, un);
+  let ins = instructions_txt.replace(/<\/USERNAME\/>/g, un);
 
-  archive.append(in, {name: "lovelyGarden/instructionsFromRabbit"});
+  archive.append(ins, {name: "lovelyGarden/instructionsFromRabbit"});
   archive.finalize();
 
 })
