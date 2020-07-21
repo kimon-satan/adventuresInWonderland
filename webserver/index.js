@@ -17,6 +17,7 @@ const utils = new Utils();
 let DRINKME_txt;
 let README_txt;
 let EATME_txt;
+let instructions_txt;
 let caucusRace_txt;
 
 utils.readFileAsync('assets/DRINKME.sh')
@@ -27,6 +28,11 @@ utils.readFileAsync('assets/DRINKME.sh')
 utils.readFileAsync('assets/README')
 .then((doc)=>{
   README_txt = doc.toString();
+})
+
+utils.readFileAsync('assets/instructionsFromRabbit')
+.then((doc)=>{
+  instructions_txt = doc.toString();
 })
 
 utils.readFileAsync('assets/EATME.sh')
@@ -234,8 +240,10 @@ app.get('/lovelygarden', (req, res) =>{
   cr = cr.replace(/<\/URL\/>/g, HOME_URL);
 
   archive.append(cr, {name: "lovelyGarden/caucusRace.sh"});
-  archive.file('./assets/instructionsFromRabbit', {name: "lovelyGarden/instructionsFromRabbit"});
 
+  let in = instructions_txt.replace(/<\/USERNAME\/>/g, un);
+
+  archive.append(in, {name: "lovelyGarden/instructionsFromRabbit"});
   archive.finalize();
 
 })
