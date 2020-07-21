@@ -216,13 +216,13 @@ elif [ $score -eq 10 ]; then
 	echo >> newFile
 	echo "Well done $AIW_USERNAME ! That was a great race." >> newFile
 	echo "This is just a demo version of Adventures In Wonderland, so I'm afraid your adventure stops here." >> newFile
-	echo "Here's what would happen next." >> newFile
+	echo "Here's what would happen next:" >> newFile
 	echo >> newFile
 	echo >> newFile
-	echo "Type “ls” in this directory. You will see a file called scoreFile." >> newFile
-	echo "Read the file using less. You will see it some cryptic codes." >> newFile
-	echo "The codes prove that you have successfully completed run the Caucus Race." >> newFile
-	echo "Everyone’s code is different and personalised to them." >> newFile
+	echo "- Type “ls” in this directory. You will see a file called scoreFile." >> newFile
+	echo "- Read the file using less. You will see it contains some cryptic codes." >> newFile
+	echo "- The codes prove that you have successfully completed the Caucus Race." >> newFile
+	echo "- Everyone’s code is different and personalised to them." >> newFile
 	echo >> newFile
 	echo >> newFile
 	echo "To continue with your adventure, you need to keep this file safe." >> newFile
@@ -230,7 +230,7 @@ elif [ $score -eq 10 ]; then
 	echo "Use “cp” to put a copy of it somewhere secure (eg. a dedicated subfolder in your documents folder)." >> newFile
 	echo >> newFile
 	echo >> newFile
-	echo "I hope you enjoyed the ride. If you'd like to know more contact me at simon@simonkatan.co.uk." >> newFile
+	echo "I hope you enjoyed the ride. If you'd like to know more then contact me at simon@simonkatan.co.uk." >> newFile
 
 	rm $winner && mv newFile $winner
 
