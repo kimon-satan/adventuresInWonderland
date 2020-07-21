@@ -45,12 +45,28 @@ utils.readFileAsync('assets/caucusRace.sh')
   caucusRace_txt = doc.toString();
 })
 
+var options = {
+  dotfiles: 'ignore',
+  etag: false,
+  extensions: ['htm', 'html'],
+  index: false,
+  maxAge: 0,
+  redirect: true,
+  setHeaders: function (res, path, stat) {
+    res.set('x-timestamp', Date.now())
+  }
+}
 
-app.use(express.static('public'));
+app.use(express.static('public',options));
 app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 app.use('/jquery', express.static('node_modules/jquery/dist'));
 app.use('/popper', express.static('node_modules/@popperjs/core/dist'));
 
+
+// app.get('/enjoy', (req,res)=>
+// {
+//   res.sendFile("public/enjoy.html");
+// });
 
 app.get('/rabbithole', (req, res) =>{
 
